@@ -9,6 +9,7 @@ from .models import *
 from .serializers import *
 from django.contrib.auth.decorators import login_required
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework.filters import SearchFilter
 
 # Create your views here.
 
