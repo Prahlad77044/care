@@ -1,7 +1,8 @@
 from rest_framework import serializers
-from .models import User
+from .models import User, UserProfile
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
+    # profile=UserProfileSerializer()
     class Meta:
         model = User
         fields =  ['name','email','date_of_birth','phone_number','password','bloodgroup','province_number','address','issue']
@@ -10,7 +11,19 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         }
     
     def create(self, validated_data):
-        return User.objects.create_user(** validated_data)
+      profile_data = validated_data.pop('profile')
+      user= User.objects.create_user(** validated_data)
+      UserProfile.objects.create(user=user, **profile_data)
+      return user
+    
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    userdetail=UserRegistrationSerializer(many=True,read_only=True)
+    class Meta:
+        model=UserProfile
+        fields=['profile_picture','userdetail']
+
+
     
     
 class UserLoginSerializer(serializers.ModelSerializer):

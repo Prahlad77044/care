@@ -11,12 +11,16 @@ from django.contrib.auth.decorators import login_required
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.filters import SearchFilter
 
+
 # Create your views here.
 
 
 class DonorDetail(viewsets.ModelViewSet):
     queryset=donordetails.objects.all()
     serializer_class= DonorSerializer
+    filter_backends=[SearchFilter]
+    search_fields=['^city']
+
     authentication_classes=[JWTAuthentication]
     permission_classes=[IsAuthenticated]
 
@@ -63,6 +67,8 @@ def feedbackviewset(request):
 class requestviewset(viewsets.ModelViewSet):
     queryset = requestdetails.objects.all()
     serializer_class= RequestSerializer
+    filter_backends=[SearchFilter]
+    search_fields=['^district','^hospital']
     authentication_classes=[JWTAuthentication]
     permission_classes=[IsAuthenticated]
     
@@ -73,14 +79,16 @@ class requestviewset(viewsets.ModelViewSet):
     
 
 @api_view(['GET','POST','DELETE','PUT'])
-@authentication_classes([JWTAuthentication])
-@permission_classes([IsAuthenticated])
+# @authentication_classes([JWTAuthentication])
+# @permission_classes([IsAuthenticated])
 def bloodrequest_list(request):
     queryset = requestdetails.objects.all() 
     # list all requester details ,or create a new details
     if request.method =='GET':
         bloodreq =requestdetails.objects.all()
         serializer=RequestSerializer(bloodreq,many=True)
+        filter_backends=[SearchFilter]
+        search_fields=['^district','^hospital']
         return Response(serializer.data)
     
     elif request.method=='POST':

@@ -2,10 +2,15 @@ from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
-from .serializers import UserRegistrationSerializer, UserLoginSerializer
+from .serializers import UserRegistrationSerializer, UserLoginSerializer,UserProfileSerializer
 from django.contrib.auth import authenticate
 from .renderers import UserRenderer
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework import viewsets
+from .models import *
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework.permissions import IsAuthenticated
+
 
 #Generate Token Manually
 def get_tokens_for_user(user):
@@ -42,4 +47,12 @@ class UserLoginView(APIView):
                 return Response({'token':token,'msg':'Login Success'}, status=status.HTTP_200_OK)
             else:
                  return Response({'errors':{'non_field_errors':['Phone Number or Password is not valid']}}, status=status.HTTP_404_NOT_FOUND)
+            
+
+
+class UserProfileViewSet(viewsets.ModelViewSet):
+    queryset = UserProfile.objects.all()
+    serializer_class = UserProfileSerializer
+    authentication_classes=[JWTAuthentication]
+    permission_classes =[IsAuthenticated]             
              
