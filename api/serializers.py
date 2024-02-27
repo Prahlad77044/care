@@ -2,11 +2,7 @@ from rest_framework import serializers
 from .models import User, UserProfile
 
 
-class UserProfileSerializer(serializers.ModelSerializer):
-    #userdetail=UserRegistrationSerializer(many=True,read_only=True)
-    class Meta:
-        model=UserProfile
-        fields='__all__'
+
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
     # profile=UserProfileSerializer()
@@ -23,12 +19,24 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
     #   UserProfile.objects.create(user=user, **profile_data)
       return user
     
-
-
-
-
+class UserProfileSerializer(serializers.ModelSerializer):
+    # userdetail=UserRegistrationSerializer(many=True)
+    name = serializers.CharField(source='User.name', read_only=True)
+    bloodgroup=serializers.CharField(source='User.bloodgroup',read_only=True)
+    phone_number=serializers.CharField(source='User.phone_number',read_only=True)
+    address=serializers.CharField(source='User.address',read_only=True)
+    date_of_birth=serializers.CharField(source='User.date_of_birth',read_only=True)
+    bloodgroup=serializers.CharField(source='User.bloodgroup',read_only=True)
+    #userid=serializers.CharField(source='User.id',read_only=True)
+    # bloodgroup=serializers.CharField(source='User.bloodgroup',read_only=True)
+    class Meta:
+        model=UserProfile
+        fields=['profile_picture','name','bloodgroup','phone_number','address','date_of_birth']    
+        # fields=['profile_picture']
     
-    
+
+
+
 class UserLoginSerializer(serializers.ModelSerializer):
     phone_number = serializers.CharField(max_length=15)
     class Meta:
