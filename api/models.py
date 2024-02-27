@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
+from django.db.models.signals import post_save
 
 #custom user model
 class UserManager(BaseUserManager):
@@ -109,3 +110,14 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     profile_picture = models.ImageField(upload_to='profile_pictures/', null=True, blank=True)    
     
+
+def create_user_profile(sender,instance,created,**kwargs):
+        if created:
+            UserProfile.objects.create(user=instance)
+
+
+def _save_user_profile(sender,instance,**kwargs):
+    instance.profile.save()
+
+post_save.connect(create_user_profile,sender=User)
+post_save.connect(_save_user_profile,sender=User)
