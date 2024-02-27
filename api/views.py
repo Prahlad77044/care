@@ -9,7 +9,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework import viewsets
 from .models import *
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated ,IsAdminUser
 
 
 #Generate Token Manually
@@ -56,5 +56,5 @@ class UserProfileViewSet(viewsets.ModelViewSet):
     queryset = UserProfile.objects.all()
     serializer_class = UserProfileSerializer
     authentication_classes= [JWTAuthentication]
-    permission_classes= [IsAuthenticated]             
+    permission_classes= [IsAuthenticated,IsAdminUser]             
              

@@ -45,6 +45,8 @@ class UserManager(BaseUserManager):
         )
         user.is_admin = True
         user.save(using=self._db)
+        # Create a profile instance for superuser
+        UserProfile.objects.create(user=user)
         return user
 
 
