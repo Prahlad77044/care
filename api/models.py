@@ -47,7 +47,7 @@ class UserManager(BaseUserManager):
         user.is_admin = True
         user.save(using=self._db)
         # Create a profile instance for superuser
-        UserProfile.objects.create(user=user)
+        # UserProfile.objects.create(user=user)
         return user
 
 
@@ -117,7 +117,7 @@ def create_user_profile(sender,instance,created,**kwargs):
 
 
 def _save_user_profile(sender,instance,**kwargs):
-    instance.profile.save()
+    instance.userprofile.save()
 
 post_save.connect(create_user_profile,sender=User)
 post_save.connect(_save_user_profile,sender=User)

@@ -27,7 +27,7 @@ class UserRegistrationView(APIView):
         serializer = UserRegistrationSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             user = serializer.save()
-            UserProfile.objects.create(user=user)
+            # UserProfile.objects.create(user=user)
             token = get_tokens_for_user(user)
            
             return Response({'token':token,'msg':'Registration Successful'},
