@@ -27,7 +27,9 @@ class UserRegistrationView(APIView):
         serializer = UserRegistrationSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             user = serializer.save()
+            UserProfile.objects.create(user=user)
             token = get_tokens_for_user(user)
+           
             return Response({'token':token,'msg':'Registration Successful'},
             status=status.HTTP_201_CREATED)
         #print(serializer.errors)
@@ -53,6 +55,6 @@ class UserLoginView(APIView):
 class UserProfileViewSet(viewsets.ModelViewSet):
     queryset = UserProfile.objects.all()
     serializer_class = UserProfileSerializer
-    authentication_classes=[JWTAuthentication]
-    permission_classes =[IsAuthenticated]             
+    authentication_classes= [JWTAuthentication]
+    permission_classes= [IsAuthenticated]             
              
